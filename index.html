@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sorry, Aida</title>
+  <meta name="description" content="A private apology from Aegis to Aida." />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;800&family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0e1117; --panel:#111727; --ink:#e9ecf5; --muted:#aeb6cf; --accent:#79a1ff; --ring:0 0 0 1px rgba(121,161,255,.22), 0 10px 40px rgba(121,161,255,.12);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%; margin:0}
+    body{background:radial-gradient(900px 600px at 15% -10%, #1b244a 0%, #0e1117 60%), linear-gradient(180deg,#0e1117,#0c0f16); color:var(--ink); font-family:Manrope,system-ui,-apple-system,Segoe UI,Roboto,Arial; overflow-x:hidden}
+
+    /* Snow canvas behind content */
+    canvas#snow{position:fixed; inset:0; width:100%; height:100%; z-index:1; pointer-events:none}
+
+    .wrap{max-width:950px; margin:0 auto; padding:24px; position:relative; z-index:2}
+
+    header{border-radius:24px; padding:40px 28px; background:linear-gradient(180deg, rgba(17,23,39,.86), rgba(15,20,34,.86)); box-shadow:var(--ring)}
+    h1{font-family:"Playfair Display", Georgia, serif; font-size:clamp(40px, 6.5vw, 72px); line-height:1.05; margin:0 0 8px}
+    .sub{color:var(--muted); font-size:clamp(15px,2.5vw,19px)}
+
+    .letter{margin-top:22px; background:rgba(17,23,39,.9); border:1px solid rgba(121,161,255,.18); border-radius:18px; padding:28px; box-shadow:var(--ring)}
+    .letter h2{font-family:"Playfair Display"; font-size:28px; margin:0 0 12px}
+    .letter p{color:#d7dbeb; font-size:clamp(16px,2.4vw,20px); line-height:1.75; margin:14px 0}
+    .sig{margin-top:18px; font-style:italic; opacity:.92; font-size:18px}
+
+    .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:16px}
+    .btn{display:inline-flex; align-items:center; gap:10px; padding:12px 16px; border-radius:12px; border:1px solid rgba(121,161,255,.35); background:linear-gradient(180deg,#9fbbff,#6e8eff); color:#0d1224; font-weight:800; text-decoration:none; cursor:pointer; box-shadow:var(--ring); transition: transform .08s ease}
+    .btn:hover{transform:translateY(-1px)}
+    .btn.secondary{background:transparent; color:#cbd6ff}
+
+    footer{opacity:.7; text-align:center; margin:26px 0 10px; font-size:12px; color:var(--muted)}
+
+    /* Soft vignette for mood */
+    .vignette{position:fixed; inset:0; pointer-events:none; z-index:0; box-shadow:inset 0 0 220px rgba(0,0,0,.4)}
+
+    /* Tap-to-start overlay for audio policy */
+    #tap{position:fixed; inset:0; z-index:3; display:none; align-items:center; justify-content:center; backdrop-filter: blur(3px);}
+    #tap .pane{background:rgba(17,23,39,.85); border:1px solid rgba(121,161,255,.25); color:var(--ink); padding:18px 22px; border-radius:14px; box-shadow:var(--ring); text-align:center}
+    #tap button{margin-top:10px}
+  </style>
+</head>
+<body>
+  <!-- Snow -->
+  <canvas id="snow"></canvas>
+  <div class="vignette"></div>
+
+  <!-- Tap-to-start (shown if autoplay blocked) -->
+  <div id="tap">
+    <div class="pane">
+      <div>🔈 Tap to start the music</div>
+      <button class="btn" id="startAudio">Play</button>
+    </div>
+  </div>
+
+  <!-- Background music (royalty‑free provided file). Place the mp3 next to this HTML file. -->
+  <audio id="bgm" src="sad-sad-piano-music-311697.mp3" preload="auto" loop></audio>
+
+  <div class="wrap">
+    <header>
+      <h1>Sorry, Aida.</h1>
+      <p class="sub">This is only for you. I lied about having leukemia. I hurt you and broke your trust. I am sorry.</p>
+    </header>
+
+    <section class="letter">
+      <h2>My letter to you</h2>
+      <p>Aida, I’m writing this quietly and only to you. I told you I had leukemia. I didn’t. I let that lie live between us and I kept feeding it, even when you looked me in the eyes and asked for the truth. When you confronted me, I defended the lie and turned it into a fight. None of this is your fault. It’s mine.</p>
+      <p>You gave me your care, your time, and your trust. I took those gifts and used them to hold up a story that should never have been told. I can’t imagine the mix of anger, sadness, and disbelief I put you through. If I could pull that weight off your chest, I would. I am deeply sorry for the fear and confusion I caused.</p>
+      <p>I’m not going to justify what I did. There isn’t a reason that makes it okay. I’m learning why I lied and what I was hiding from, and I’m putting real work into changing it—so this never touches you, or anyone else, again. That work will be quiet and consistent. No dramatic promises. Just better choices, every time.</p>
+      <p>If you ever choose to talk, I will listen—fully—without interrupting, without defending myself, and without asking you for anything you don’t want to give. If what you need is space, I will respect that. If you want something specific from me to repair even a small part of the harm, tell me and I will do it.</p>
+      <p>I know “sorry” doesn’t fix it. But I want you to have this: the truth, plainly said; my apology, without excuses; and my promise to be honest going forward, whether or not we ever speak again.</p>
+      <p class="sig">— Aegis</p>
+
+      <div class="cta">
+        <a id="send" class="btn" href="#" target="_blank" rel="noreferrer">Reply (your way)</a>
+        <a id="alt" class="btn secondary" href="mailto:me@example.com">Or email me</a>
+      </div>
+    </section>
+
+    <footer>
+      This page is private. It exists only to apologize to Aida.
+    </footer>
+  </div>
+
+  <script>
+    // ===== Snow effect =====
+    const canvas = document.getElementById('snow');
+    const ctx = canvas.getContext('2d');
+    let w,h; function size(){w=canvas.width=innerWidth; h=canvas.height=innerHeight;} size(); addEventListener('resize', size);
+    const flakes = Array.from({length:150},()=>({x:Math.random()*w,y:Math.random()*h,r:Math.random()*2.6+0.8,d:Math.random()+0.8}));
+    let ang=0; function tick(){ctx.clearRect(0,0,w,h); ctx.fillStyle='rgba(255,255,255,.9)'; ctx.beginPath(); for(const f of flakes){ctx.moveTo(f.x,f.y); ctx.arc(f.x,f.y,f.r,0,Math.PI*2)} ctx.fill(); ang+=.008; for(const f of flakes){f.y+=Math.pow(f.d,2)+.8; f.x+=Math.sin(ang)*1.8; if(f.y>h){f.y=-5; f.x=Math.random()*w}} requestAnimationFrame(tick);} tick();
+
+    // ===== Audio handling =====
+    const audio = document.getElementById('bgm');
+    audio.volume = 0.25; // gentle
+
+    // Try to autoplay. If blocked, show the tap overlay.
+    const tap = document.getElementById('tap');
+    const startBtn = document.getElementById('startAudio');
+
+    async function tryPlay(){
+      try{ await audio.play(); tap.style.display='none'; }
+      catch(e){ tap.style.display='flex'; }
+    }
+
+    // Attempt on load and also on first user gesture
+    document.addEventListener('DOMContentLoaded', tryPlay);
+    window.addEventListener('pointerdown', tryPlay, { once:true });
+    startBtn?.addEventListener('click', tryPlay);
+
+    // ===== Private reply link (set your DM/profile URL here) =====
+    const privateURL = "https://example.com/dm"; // ← paste the real private link
+    const send = document.getElementById('send');
+    if (privateURL && send) send.href = privateURL;
+  </script>
+</body>
+</html>
