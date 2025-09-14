@@ -38,10 +38,10 @@
     /* Soft vignette for mood */
     .vignette{position:fixed; inset:0; pointer-events:none; z-index:0; box-shadow:inset 0 0 220px rgba(0,0,0,.4)}
 
-    /* Tap-to-start overlay for audio policy */
-    #tap{position:fixed; inset:0; z-index:3; display:none; align-items:center; justify-content:center; backdrop-filter: blur(3px);}
-    #tap .pane{background:rgba(17,23,39,.85); border:1px solid rgba(121,161,255,.25); color:var(--ink); padding:18px 22px; border-radius:14px; box-shadow:var(--ring); text-align:center}
-    #tap button{margin-top:10px}
+    /* Overlay for music start */
+    #overlay{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;background:rgba(10,12,20,.88);backdrop-filter:blur(4px);}
+    #overlay button{padding:14px 26px;font-size:20px;font-weight:700;border:none;border-radius:14px;cursor:pointer;background:linear-gradient(180deg,#9fbbff,#6e8eff);color:#0d1224;box-shadow:var(--ring);}
+    #overlay button:hover{transform:translateY(-1px)}
   </style>
 </head>
 <body>
@@ -49,16 +49,15 @@
   <canvas id="snow"></canvas>
   <div class="vignette"></div>
 
-  <!-- Tap-to-start (shown if autoplay blocked) -->
-  <div id="tap">
-    <div class="pane">
-      <div>Continue?</div>
-      <button class="btn" id="startAudio">Yes</button>
-    </div>
-  </div>
+  <!-- Background music -->
+  <audio id="bgm" preload="auto" loop>
+    <source src="sad-sad-piano-music-311697.mp3" type="audio/mpeg">
+  </audio>
 
-  <!-- Background music (royalty‑free provided file). Place the mp3 next to this HTML file. -->
-  <audio id="bgm" src="sad-sad-piano-music-311697.mp3" preload="auto" loop></audio>
+  <!-- Overlay to start music -->
+  <div id="overlay">
+    <button id="continueBtn">Continue</button>
+  </div>
 
   <div class="wrap">
     <header>
@@ -94,26 +93,23 @@
     const flakes = Array.from({length:150},()=>({x:Math.random()*w,y:Math.random()*h,r:Math.random()*2.6+0.8,d:Math.random()+0.8}));
     let ang=0; function tick(){ctx.clearRect(0,0,w,h); ctx.fillStyle='rgba(255,255,255,.9)'; ctx.beginPath(); for(const f of flakes){ctx.moveTo(f.x,f.y); ctx.arc(f.x,f.y,f.r,0,Math.PI*2)} ctx.fill(); ang+=.008; for(const f of flakes){f.y+=Math.pow(f.d,2)+.8; f.x+=Math.sin(ang)*1.8; if(f.y>h){f.y=-5; f.x=Math.random()*w}} requestAnimationFrame(tick);} tick();
 
-    // ===== Audio handling =====
-    const audio = document.getElementById('bgm');
-    audio.volume = 0.25; // gentle
+    // ===== Music start overlay =====
+    const overlay = document.getElementById('overlay');
+    const continueBtn = document.getElementById('continueBtn');
+    const bgm = document.getElementById('bgm');
+    bgm.volume = 0.25;
 
-    // Try to autoplay. If blocked, show the tap overlay.
-    const tap = document.getElementById('tap');
-    const startBtn = document.getElementById('startAudio');
+    continueBtn.addEventListener('click', async ()=>{
+      try{
+        await bgm.play();
+        overlay.style.display = 'none';
+      }catch(e){
+        console.error('Music play failed', e);
+      }
+    });
 
-    async function tryPlay(){
-      try{ await audio.play(); tap.style.display='none'; }
-      catch(e){ tap.style.display='flex'; }
-    }
-
-    // Attempt on load and also on first user gesture
-    document.addEventListener('DOMContentLoaded', tryPlay);
-    window.addEventListener('pointerdown', tryPlay, { once:true });
-    startBtn?.addEventListener('click', tryPlay);
-
-    // ===== Private reply link (set your DM/profile URL here) =====
-    const privateURL = "discord.com/users/1362665201824174100"; // ← paste the real private link
+    // ===== Private reply link =====
+    const privateURL = "https://example.com/dm";
     const send = document.getElementById('send');
     if (privateURL && send) send.href = privateURL;
   </script>
